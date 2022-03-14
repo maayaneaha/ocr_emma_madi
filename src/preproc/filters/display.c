@@ -1,7 +1,6 @@
 #include <err.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "pixel_operations.h"
 
 void init_sdl()
 {
@@ -79,48 +78,6 @@ int main()
 
 	wait_for_keypressed();
 
-	//Getting width and height of image
-	
-	int width = image_surface->w;
-	int height = image_surface->h;
-
-	//Initialising RBG values of a pixel
-	
-	Uint8 r, g, b;
-
-	Uint8 average;
-
-	//Browsing every pixel
-	
-	for(int i = 0 ; i < width ; i++)
-	{
-		for(int j = 0 ; j < height ; j++)
-		{
-			//getting pixel at i, j
-			Uint32 pixel = get_pixel(image_surface, i, j);
-
-			//getting pixel's RGB values
-			SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
-			
-			//calculating the gray value
-			average = 0.3*r + 0.59*g + 0.11*b;
-
-			//applying our gray to each color
-			r = average;
-			g = average;
-			b = average;
-
-			//create a new pixel, and putting it in place
-			pixel = SDL_MapRGB(image_surface->format, r, g, b);
-			put_pixel(image_surface, i, j, pixel);		
-		}
-	}
-
-	//redraw the surfaces
-	update_surface(screen_surface, image_surface);
-	wait_for_keypressed();
-
-	//free the surfaces
 	SDL_FreeSurface(image_surface);
 	SDL_FreeSurface(screen_surface);
 

@@ -3,7 +3,7 @@
 #include "SDL/SDL_image.h"
 #include "pixel_operations.h"
 
-void init_sdl()
+void init_SDL()
 {
 	// Init only the video part.
 	// If it fails, die with an error message.
@@ -15,34 +15,34 @@ SDL_Surface* load_image(char *path)
 {
 	SDL_Surface *img;
 
-        // Load an image using SDL_image with format detection.
+	// Load an image using SDL_image with format detection.
 	// If it fails, die with an error message.
+
 	img = IMG_Load(path);
 	if (!img)
 		errx(3, "can't load %s: %s", path, IMG_GetError());
-	
+
 	return img;
 }
 
 SDL_Surface* display_image(SDL_Surface *img)
 {
 	SDL_Surface *screen;
-
 	// Set the window to the same size as the image
 	screen = SDL_SetVideoMode(img->w, img->h, 0, SDL_SWSURFACE|SDL_ANYFORMAT);
 	if (screen == NULL)
 	{
 		// error management
 		errx(1, "Couldn't set %dx%d video mode: %s\n",
-			img->w, img->h, SDL_GetError());
+				img->w, img->h, SDL_GetError());
 	}
 	// Blit onto the screen surface
 	if(SDL_BlitSurface(img, NULL, screen, NULL) < 0)
 		warnx("BlitSurface error: %s\n", SDL_GetError());
-		
-        // Update the screen
+
+	// Update the screen
 	SDL_UpdateRect(screen, 0, 0, img->w, img->h);
-	
+
 	//return the screen for further uses
 	return screen;
 }
@@ -55,7 +55,7 @@ void wait_for_keypressed()
 	do
 	{
 		SDL_PollEvent(&event);
-	} while(event.type != SDL_KEYDOWN);
+	} while(event.type != SDL_KEYUP);
 
 	// Wait for a key to be up.
 	do
@@ -64,7 +64,7 @@ void wait_for_keypressed()
 	} while(event.type != SDL_KEYUP);
 }
 
-void SDL_FreeSurface(SDL_Surface *surface);
+void SDLFreeSurface(SDL_Surface *surface);
 
 int main()
 {
@@ -81,38 +81,27 @@ int main()
 
 	//Getting width and height of image
 	
+
 	int width = image_surface->w;
 	int height = image_surface->h;
 
 	//Initialising RBG values of a pixel
 	
+
+	Uint32 pxl;
 	Uint8 r, g, b;
-
-	Uint8 average;
-
-	//Browsing every pixel
-	
-	for(int i = 0 ; i < width ; i++)
+	int W = img->w, H = img->h;
+	for(int i = 0; i < W; i++)
 	{
-		for(int j = 0 ; j < height ; j++)
+		for(int j = 0; j < H; j++)
 		{
-			//getting pixel at i, j
-			Uint32 pixel = get_pixel(image_surface, i, j);
-
-			//getting pixel's RGB values
-			SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
-			
-			//calculating the gray value
-			average = 0.3*r + 0.59*g + 0.11*b;
-
-			//applying our gray to each color
-			r = average;
-			g = average;
-			b = average;
-
-			//create a new pixel, and putting it in place
-			pixel = SDL_MapRGB(image_surface->format, r, g, b);
-			put_pixel(image_surface, i, j, pixel);		
+			pxl = get_pixel(img, i, j);
+	           	SDL_GetRGB(pxl, img->format, &r, &g, &b);
+		        r = r >= 10 ? 255 : 0;
+			g = g >= 10 ? 255 : 0;
+		        b = b >= 10 ? 255 : 0;
+			pxl = SDL_MapRGB(img->format, r, g, b);
+		        put_pixel(img, i, j, pxl);
 		}
 	}
 
