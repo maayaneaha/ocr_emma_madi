@@ -64,21 +64,51 @@ void wait_for_keypressed()
 	} while(event.type != SDL_KEYUP);
 }
 
-void SDL_FreeSurface(SDL_Surface *surface);
-
-int main()
+long moy(char* path)
 {
+	SDL_Surface* image_surface;
+	init_sdl();
+	image_surface = load_image(path);
+
+	int width = image_surface->w;
+	int height = image_surface->h;
+	long rtotal = 0;
+	long gtotal = 0;
+	long btotal = 0;
+	long total_pixel = width * height;
+	for (int i=0 ; i<width ; i++)
+	{
+		for (int j=0 ; j<height ; j++)
+		{
+			Uint32 pixel = get_pixel(image_surface, i, j);
+			Uint8 r, g, b;
+			SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
+		rtotal += (long)r;
+		gtotal += (long)g;
+		btotal += (long)b;
+		}
+	}
+	rtotal /= total_pixel;
+	gtotal /= total_pixel;
+	btotal /= total_pixel;
+	SDL_FreeSurface(image_surface);
+	return ((rtotal + gtotal + btotal)/3);
+	}
+	void SDL_FreeSurface(SDL_Surface *surface);
+
+int main(int argc, char *array[])
+{
+	if (argc == 0)
+		return EXIT_FAILURE;
 	SDL_Surface* image_surface;
 	SDL_Surface* screen_surface;
 
 	init_sdl();
 
-	image_surface = load_image("my_image.jpg");
+	image_surface = load_image(array[1]);
 
 	screen_surface = display_image(image_surface);
-
 	wait_for_keypressed();
-
 	//Getting width and height of image
 	
 	int width = image_surface->w;
@@ -88,9 +118,9 @@ int main()
 	
 	Uint8 r, g, b;
 
-	Uint8 average;
+	Uint8 averageg;
 
-	//Browsing every pixel
+	//Grayscale
 	
 	for(int i = 0 ; i < width ; i++)
 	{
@@ -103,19 +133,50 @@ int main()
 			SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
 			
 			//calculating the gray value
-			average = 0.3*r + 0.59*g + 0.11*b;
+			averageg = 0.3*r + 0.59*g + 0.11*b;
 
 			//applying our gray to each color
-			r = average;
-			g = average;
-			b = average;
+			r = averageg;
+			g = averageg;
+			b = averageg;
 
 			//create a new pixel, and putting it in place
 			pixel = SDL_MapRGB(image_surface->format, r, g, b);
 			put_pixel(image_surface, i, j, pixel);		
 		}
 	}
+	
 
+
+
+	long average = moy(array[1]);
+	
+	//binarize
+	for(int i = 0 ; i < width ; i++)
+	{
+		for(int j = 0 ; j < height ; j++)
+		{
+			//getting pixel at i, j
+			Uint32 pixel = get_pixel(image_surface, i, j);
+
+			//getting pixel's RGB values
+			SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
+			
+			if (r <= average)
+			{
+				r = 0;
+			}
+			else
+			{
+				r = 255;
+			}
+			
+
+			//create a new pixel, and putting it in place
+			pixel = SDL_MapRGB(image_surface->format, r, r, r);
+			put_pixel(image_surface, i, j, pixel);		
+		}
+	}
 	//redraw the surfaces
 	update_surface(screen_surface, image_surface);
 	wait_for_keypressed();
@@ -124,5 +185,6 @@ int main()
 	SDL_FreeSurface(image_surface);
 	SDL_FreeSurface(screen_surface);
 
+	//printf("%lu", moy(array[1]));
 	return 0;
 }

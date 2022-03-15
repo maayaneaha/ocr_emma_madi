@@ -65,14 +65,16 @@ void wait_for_keypressed()
 
 void SDL_FreeSurface(SDL_Surface *surface);
 
-int main()
+int main(int argc, char *array[])
 {
+	if (argc == 0)
+		return EXIT_FAILURE;
 	SDL_Surface* image_surface;
 	SDL_Surface* screen_surface;
 
 	init_sdl();
 
-	image_surface = load_image("my_image.jpg");
+	image_surface = load_image(array[1]);
 
 	screen_surface = display_image(image_surface);
 
