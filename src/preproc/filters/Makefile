@@ -8,7 +8,7 @@ LDLIBS= `pkg-config --libs sdl SDL_image`
 all: display grayscale
 
 display: display.o
-grayscale:  grayscale.o
+grayscale: pixel_operations.o grayscale.o
 grayscale.o: pixel_operations.h
 
 clean:
