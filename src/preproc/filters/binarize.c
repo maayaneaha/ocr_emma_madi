@@ -66,14 +66,16 @@ void wait_for_keypressed()
 
 void SDLFreeSurface(SDL_Surface *surface);
 
-int main()
+int main(int argc, char *array[])
 {
+	if (argc == 0)
+		return EXIT_FAILURE;
 	SDL_Surface* image_surface;
 	SDL_Surface* screen_surface;
 
 	init_sdl();
 
-	image_surface = load_image("my_image.jpg");
+	image_surface = load_image(array[1]);
 
 	screen_surface = display_image(image_surface);
 
@@ -82,26 +84,26 @@ int main()
 	//Getting width and height of image
 	
 
-	int width = image_surface->w;
-	int height = image_surface->h;
+	//int width = image_surface->w;
+	//int height = image_surface->h;
 
 	//Initialising RBG values of a pixel
 	
 
 	Uint32 pxl;
 	Uint8 r, g, b;
-	int W = img->w, H = img->h;
+	int W = image_surface->w, H = image_surface->h;
 	for(int i = 0; i < W; i++)
 	{
 		for(int j = 0; j < H; j++)
 		{
-			pxl = get_pixel(img, i, j);
-	           	SDL_GetRGB(pxl, img->format, &r, &g, &b);
+			pxl = get_pixel(image_surface, i, j);
+	           	SDL_GetRGB(pxl, image_surface->format, &r, &g, &b);
 		        r = r >= 10 ? 255 : 0;
 			g = g >= 10 ? 255 : 0;
 		        b = b >= 10 ? 255 : 0;
-			pxl = SDL_MapRGB(img->format, r, g, b);
-		        put_pixel(img, i, j, pxl);
+			pxl = SDL_MapRGB(image_surface->format, r, g, b);
+		        put_pixel(image_surface, i, j, pxl);
 		}
 	}
 
