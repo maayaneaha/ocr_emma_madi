@@ -13,8 +13,9 @@ void update_surface(SDL_Surface* screen, SDL_Surface* image);
 //Filters functions:
 
 void grayscale(SDL_Surface* screen, int width, int height);
-void binarise(SDL_Surface* screen, int width, int height);
+void binarise(SDL_Surface* screen, int width, int height, int factor);
 void noiseReduction(SDL_Surface *img, int width, int height);
+void contrast(SDL_Surface* img,int delta);
 
 
 

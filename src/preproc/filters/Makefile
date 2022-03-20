@@ -14,4 +14,5 @@ processing: processing.o filters.o
 clean:
 	${RM} *.o
 	${RM} *.d
+	${RM} *.bmp
 	${RM} processing

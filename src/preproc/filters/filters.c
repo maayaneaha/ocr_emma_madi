@@ -132,6 +132,15 @@ void array_select_sort(int array[], size_t len)
     }
 }
 
+int StayOnInterval256(int n)
+{
+    if (n < 0)
+        return 0;
+    if (n > 255)
+        return 255;
+    return n;
+}
+
 // FILTERS
 
 void grayscale(SDL_Surface *image_surface, int width, int height)
@@ -162,18 +171,15 @@ void grayscale(SDL_Surface *image_surface, int width, int height)
 
 void noiseReduction(SDL_Surface *surface, int width, int height)
 {
-    int w = width;
-    int h = height;
     int pixelTable[5];
 
-    for (int i = 0; i < w; i++)
+    for (int i = 0; i < width; i++)
     {
-        for (int j = 0; j < h; j++)
+        for (int j = 0; j < height; j++)
         {
 
             for (int k = j; k <= j + 4; k++)
             {
-                // Borders of picture
                 if (i == 0)
                 {
                     if (k == 0)
@@ -185,7 +191,7 @@ void noiseReduction(SDL_Surface *surface, int width, int height)
                         pixelTable[4] = get_pixel(surface, i + 1, k);
                         break;
                     }
-                    if (k == h)
+                    if (k == height)
                     {
                         pixelTable[0] = get_pixel(surface, i, k);
                         pixelTable[1] = get_pixel(surface, i, k - 1);
@@ -204,7 +210,7 @@ void noiseReduction(SDL_Surface *surface, int width, int height)
                         break;
                     }
                 }
-                if (i == w)
+                if (i == width)
                 {
                     if (k == 0)
                     {
@@ -215,7 +221,7 @@ void noiseReduction(SDL_Surface *surface, int width, int height)
                         pixelTable[4] = get_pixel(surface, i, k);
                         break;
                     }
-                    if (k == h)
+                    if (k == height)
                     {
                         pixelTable[0] = get_pixel(surface, i, k);
                         pixelTable[1] = get_pixel(surface, i, k - 1);
@@ -243,7 +249,7 @@ void noiseReduction(SDL_Surface *surface, int width, int height)
                     pixelTable[4] = get_pixel(surface, i + 1, k);
                     break;
                 }
-                if (k == h)
+                if (k == height)
                 {
                     pixelTable[0] = get_pixel(surface, i, k);
                     pixelTable[1] = get_pixel(surface, i, k - 1);
@@ -268,7 +274,37 @@ void noiseReduction(SDL_Surface *surface, int width, int height)
     }
 }
 
-void binarise(SDL_Surface *image_surface, int width, int height)
+void contrast(SDL_Surface* img,int delta)
+{
+    double factor = (259 * (delta + 255)) / (255.0 * (259.0 - delta));
+    Uint32 pixel;
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+    int w = img -> w;
+    int h = img -> h;
+
+    if (delta == 259)
+    {
+        delta = 258;
+    }
+
+    for (int i = 0; i < w;i++)
+    {
+        for(int j = 0; j< h; j++)
+        {
+            pixel = get_pixel(img, i,j);
+            SDL_GetRGB(pixel, img->format, &r,&g,&b);
+            r = StayOnInterval256(factor * (r - 128) + 128);
+            g = StayOnInterval256(factor * (g- 128) + 128);
+            b = StayOnInterval256(factor * (b - 128) + 128);
+            pixel = SDL_MapRGB(img -> format,r,g,b);
+            put_pixel(img,i,j,pixel);
+        }
+    }
+}
+
+void binarise(SDL_Surface *image_surface, int width, int height, int factor)
 {
     long value = 0;
     for (int i = 0; i < width; i++)
@@ -283,7 +319,7 @@ void binarise(SDL_Surface *image_surface, int width, int height)
     }
 
     value = value / (width * height);
-    value = (double)value * 0.80;
+    value = (double)value * ((double)factor/100);
     if (value > 255)
     {
         value = 255;
