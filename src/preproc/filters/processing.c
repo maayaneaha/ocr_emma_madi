@@ -95,6 +95,7 @@ if (argc == 0)
     //FILTERS
 
     grayscale(image_surface,width,height);
+    noiseReduction(image_surface,width,height);
     binarise(image_surface,width,height);
 
     //END FILTERS
