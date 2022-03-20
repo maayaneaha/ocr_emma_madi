@@ -94,7 +94,7 @@ if (argc == 0)
     
     //FILTERS
 
-    //contrast(image_surface,1); //RESULTS ARE NOT AS EXPECTED
+    //contrast(image_surface,100); //RESULTS ARE NOT AS EXPECTED
     grayscale(image_surface,width,height);
     //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
     binarise(image_surface,width,height, 80);

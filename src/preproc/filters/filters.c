@@ -274,7 +274,7 @@ void noiseReduction(SDL_Surface *surface, int width, int height)
     }
 }
 
-void contrast(SDL_Surface* img,int delta)
+void contrast(SDL_Surface* img, int delta)
 {
     double factor = (259 * (delta + 255)) / (255.0 * (259.0 - delta));
     Uint32 pixel;
