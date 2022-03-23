@@ -34,7 +34,7 @@ void grayscale(SDL_Surface *image_surface, int width, int height)
     }
 }
 
-/*
+
 void contrast(SDL_Surface* img, int delta)
 {
     double factor = (259 * (delta + 255)) / (255.0 * (259.0 - delta));
@@ -64,8 +64,8 @@ void contrast(SDL_Surface* img, int delta)
         }
     }
 }
-
-void contrast2(SDL_Surface *image_surface,int width, int height)
+/*
+void contrast(SDL_Surface *image_surface,int width, int height)
 {
     Uint8 r, g, b;
     long average_red = 0;
@@ -308,7 +308,7 @@ void blur(SDL_Surface *img, int w, int h)
    }
  }
 }
-
+/*
 void contrast(SDL_Surface *image_surface, int width, int height)
 {
     long value = 0;
@@ -341,6 +341,7 @@ void contrast(SDL_Surface *image_surface, int width, int height)
         }
     }
 }
+*/
 
 void binarise(SDL_Surface *image_surface, int width, int height, int factor)
 {

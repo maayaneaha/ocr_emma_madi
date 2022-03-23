@@ -89,8 +89,8 @@ int main(int argc, char *array[])
     screen_surface = display_image(image_surface);
     wait_for_keypressed();
 
-    gamma_sdl(image_surface,width,height);
-    grayscale(image_surface, width, height);
+    //gamma_sdl(image_surface,width,height);
+    //grayscale(image_surface, width, height);
     contrast(image_surface, width, height);
     //otsu(image_surface);
     //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
@@ -98,10 +98,10 @@ int main(int argc, char *array[])
 
 
 
-    binarise(image_surface, width, height, 220);
+    binarise(image_surface, width, height, 270);
     //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
     //otsu(image_surface);
-    //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
+    noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
 
 
 
