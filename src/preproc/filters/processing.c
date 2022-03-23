@@ -7,11 +7,11 @@ void init_sdl()
 {
     // Init only the video part.
     // If it fails, die with an error message.
-    if(SDL_Init(SDL_INIT_VIDEO) == -1)
-        errx(1,"Could not initialize SDL: %s.\n", SDL_GetError());
+    if (SDL_Init(SDL_INIT_VIDEO) == -1)
+        errx(1, "Could not initialize SDL: %s.\n", SDL_GetError());
 }
 
-SDL_Surface* load_image(char *path)
+SDL_Surface *load_image(char *path)
 {
     SDL_Surface *img;
 
@@ -24,21 +24,21 @@ SDL_Surface* load_image(char *path)
     return img;
 }
 
-SDL_Surface* display_image(SDL_Surface *img)
+SDL_Surface *display_image(SDL_Surface *img)
 {
     SDL_Surface *screen;
 
     // Set the window to the same size as the image
-    screen = SDL_SetVideoMode(img->w, img->h, 0, SDL_SWSURFACE|SDL_ANYFORMAT);
+    screen = SDL_SetVideoMode(img->w, img->h, 0, SDL_SWSURFACE | SDL_ANYFORMAT);
     if (screen == NULL)
     {
         // error management
         errx(1, "Couldn't set %dx%d video mode: %s\n",
-                img->w, img->h, SDL_GetError());
+             img->w, img->h, SDL_GetError());
     }
 
     // Blit onto the screen surface
-    if(SDL_BlitSurface(img, NULL, screen, NULL) < 0)
+    if (SDL_BlitSurface(img, NULL, screen, NULL) < 0)
         warnx("BlitSurface error: %s\n", SDL_GetError());
 
     // Update the screen
@@ -56,63 +56,70 @@ void wait_for_keypressed()
     do
     {
         SDL_PollEvent(&event);
-    } while(event.type != SDL_KEYDOWN);
+    } while (event.type != SDL_KEYDOWN);
 
     // Wait for a key to be up.
     do
     {
         SDL_PollEvent(&event);
-    } while(event.type != SDL_KEYUP);
+    } while (event.type != SDL_KEYUP);
 }
 
 void SDL_FreeSurface(SDL_Surface *surface);
 
-void save(SDL_Surface* image_surface)
+void save(SDL_Surface *image_surface)
 {
-    SDL_SaveBMP(image_surface,"output.bmp");
+    SDL_SaveBMP(image_surface, "output.bmp");
 }
 
 int main(int argc, char *array[])
 {
-if (argc == 0)
-		return EXIT_FAILURE;
+    if (argc == 0)
+        return EXIT_FAILURE;
 
-	SDL_Surface* image_surface;
-	SDL_Surface* screen_surface;
+    SDL_Surface *image_surface;
+    SDL_Surface *screen_surface;
 
     init_sdl();
     image_surface = load_image(array[1]);
 
-
     int width = image_surface->w;
-	int height = image_surface->h;
+    int height = image_surface->h;
 
-    
-	screen_surface = display_image(image_surface);
-	wait_for_keypressed();
+    screen_surface = display_image(image_surface);
+    wait_for_keypressed();
 
-    
-    //FILTERS
-
-    //contrast(image_surface,100); //RESULTS ARE NOT AS EXPECTED
-    grayscale(image_surface,width,height);
+    gamma_sdl(image_surface,width,height);
+    grayscale(image_surface, width, height);
+    contrast(image_surface, width, height);
+    //otsu(image_surface);
     //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
-    binarise(image_surface,width,height, 80);
+    //blur(image_surface,width,height);
 
-    //END FILTERS
 
-	screen_surface = display_image(image_surface);
-	wait_for_keypressed();
 
-    //SAVING
+    binarise(image_surface, width, height, 220);
+    //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
+    //otsu(image_surface);
+    //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
+
+
+
+
+
+    // END FILTERS
+
+    screen_surface = display_image(image_surface);
+    wait_for_keypressed();
+
+    // SAVING
 
     save(image_surface);
 
-    //END SAVING
+    // END SAVING
 
-	SDL_FreeSurface(image_surface);
-	SDL_FreeSurface(screen_surface);
+    SDL_FreeSurface(image_surface);
+    SDL_FreeSurface(screen_surface);
 
-	return 0;
+    return 0;
 }
-
