@@ -89,17 +89,12 @@ int main(int argc, char *array[])
     screen_surface = display_image(image_surface);
     wait_for_keypressed();
 
-    //gamma_sdl(image_surface,width,height);
-
-
     grayscale(image_surface, width, height);
     contrast(image_surface, width, height);
-    //otsu(image_surface);
-    binarise(image_surface, width, height, 160);
-
+    binarise(image_surface, width, height, 260);
     invert(image_surface,width,height);
     noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
-    //blur(image_surface,width,height);
+    blur(image_surface,width,height);
 
 
 

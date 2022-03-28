@@ -86,6 +86,7 @@ void contrast(SDL_Surface* img, int delta)
         }
     }
 }
+
 /*
 void contrast(SDL_Surface *image_surface,int width, int height)
 {
@@ -364,7 +365,6 @@ void contrast(SDL_Surface *image_surface, int width, int height)
     }
 }
 */
-
 void binarise(SDL_Surface *image_surface, int width, int height, int factor)
 {
     long value = 0;
@@ -405,6 +405,8 @@ void binarise(SDL_Surface *image_surface, int width, int height, int factor)
         }
     }
 }
+
+/*
 
 void init_hist(SDL_Surface *image_surface, int width, int height, float *hist)
 {
@@ -495,3 +497,5 @@ void otsu(SDL_Surface *image_surface)
 
 // OTSU END
 // FILTERS END
+
+*/
