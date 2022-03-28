@@ -174,7 +174,7 @@ void ForwardPass(struct NeuralNetwork net, int inpValues, int epoch)
 			    NavMatrix(net.matAim, inpValues, 0));
 
 	// Printing the results every 100 epoch
-	if (epoch % 100 == 0)
+	if (epoch % 100000 == 0)
         {
 		if (inpValues == 0)
 		{
@@ -339,7 +339,7 @@ void freeMat(struct NeuralNetwork *net)
 void XOR()
 {
 	struct NeuralNetwork nettest = InitializeNetwork();
-	for(int epoch = 0; epoch < 5000; epoch++)
+	for(int epoch = 0; epoch < 10000001; epoch++)
 	{
 		
         		
