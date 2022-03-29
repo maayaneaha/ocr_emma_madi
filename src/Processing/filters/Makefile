@@ -15,3 +15,4 @@ clean:
 	${RM} *.d
 	${RM} *.bmp
 	${RM} processing
+	${RM} *.sh
