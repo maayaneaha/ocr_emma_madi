@@ -137,7 +137,7 @@ void wait_for_keypressed()
 
 void setlines(SDL_Surface *image, int *x, int *y)
 {
-	Uint32 pixel = SDL_MapRGB(image->format, 45, 235, 1);
+	Uint32 pixel = SDL_MapRGB(image->format, 255, 62, 181);
 	for(int i = 0; i < 10; i++)
 	{
 		int xx = y[i];
