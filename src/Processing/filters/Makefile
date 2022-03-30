@@ -6,13 +6,14 @@ CFLAGS= -Wall -Wextra -Werror -std=c99 -O3
 LDFLAGS=
 LDLIBS= `pkg-config --libs sdl SDL_image` -lm -export-dynamic
 
-all: processing
+all: processing image
 
 processing: processing.o filters.o tools.o
 
 clean:
 	${RM} *.o
 	${RM} *.d
+	(cd output; ${RM} *.bmp)
 	${RM} *.bmp
 	${RM} processing
 	${RM} *.sh
