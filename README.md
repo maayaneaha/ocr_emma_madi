@@ -30,7 +30,7 @@ Our XOR can display at leat 10 000 000 populations. It shows every 100 000popula
 #### processing
 ##### filters
 ```sh
-./processing [PICTURE\'S NAME] [NAME PICTURE AFTER FILTERS]
+./processing [PICTURE\`S NAME] [NAME PICTURE AFTER FILTERS]
 ```
 The input folder contains initial pictures without being analysed yet.
 The output folder contains pitures post-treatment.
