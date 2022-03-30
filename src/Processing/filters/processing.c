@@ -2,6 +2,8 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include "filters.h"
+#include <stdlib.h>
+#include <string.h>
 
 void init_sdl()
 {
@@ -67,16 +69,28 @@ void wait_for_keypressed()
 
 void SDL_FreeSurface(SDL_Surface *surface);
 
-void save(SDL_Surface *image_surface)
+char* concat(const char *s1, const char *s2)
 {
-    SDL_SaveBMP(image_surface, "output.bmp");
+    char *result = malloc(strlen(s1) + strlen(s2) + 1); // +1 for the null-terminator
+    // in real code you would check for errors in malloc here
+    strcpy(result, s1);
+    strcat(result, s2);
+    return result;
+}
+
+void save(SDL_Surface *image_surface, char* n)
+{
+    printf("%s",concat("output/",n));
+    SDL_SaveBMP(image_surface, concat("output/",n));
 }
 
 int main(int argc, char *array[])
 {
-    if (argc == 0)
+    if (argc != 3)
+	{
+	printf("ERROR: NO INPUT FILE\n");
         return EXIT_FAILURE;
-
+	}
     SDL_Surface *image_surface;
     SDL_Surface *screen_surface;
 
@@ -113,7 +127,7 @@ int main(int argc, char *array[])
 
     // SAVING
 
-    save(image_surface);
+    save(image_surface,array[2]);
 
     // END SAVING
 
