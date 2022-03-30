@@ -3,8 +3,8 @@
 
 > Our OCR is made by four students of EPITA, for the third semester.
 
-This OCR resolves a Sudoku grid on a picture. Our Neural Network can detect any digits on this picture.
-Our OCR can be train to detect more numbers than now.
+This OCR resolves a Sudoku grid on a picture. Our Neural Network can detect any digits on any pictures.
+Our OCR can be trained to detect more numbers than now.
 
 ### INSTALLATION
 
@@ -19,13 +19,13 @@ make
 This folder contains every grids that can be tested on this OCR.
 
 #### dataset
-We took our pictures on an picture bank from internet : we used a generator to make more than 1000 different image for every digits (1 to 9).
+We took our pictures on an picture bank from internet : we used a generator to make more than 1000 different image file for every digits (1 to 9).
 
 #### Neural Network
 ```sh
 ./xor
 ```
-Our XOR can display at leat 10 000 000 populations. It shows every 100 000populations the results.
+Our XOR can display at least 10 000 000 populations. It shows every 100 000 populations the results.
 
 #### processing
 ##### filters
@@ -41,7 +41,7 @@ When the "make clean" command is executed, all the files in the output's folder 
 ./rot [PICTURE/S NAME] [ANGLE OF ROTATION]
 ```
 The new picture is named as "picturerotate.bmp".
-The new picture can be seen by taping 'display picturerotate.bmp' on the shell.
+The new picture can be seen by executing 'display picturerotate.bmp' on the shell.
 
 ##### segmentation
 ```sh
