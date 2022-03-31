@@ -4,7 +4,7 @@
 #include <math.h>
 #include "Tools.h"
 
-void XOR();
+void XOR(unsigned long epochMax);
 
 
 #endif

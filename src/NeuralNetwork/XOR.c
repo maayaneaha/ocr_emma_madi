@@ -66,7 +66,7 @@ struct NeuralNetwork InitializeNetwork()
 	struct NeuralNetwork net;
 	
 	net.nbInputs = 2;
-	net.nbHidden = 2;
+	net.nbHidden = 20;
 	net.nbOutputs = 1;
 
 // Initializing input matrix
@@ -336,13 +336,11 @@ void freeMat(struct NeuralNetwork *net)
 }
 
 // Function that train the neural network
-void XOR()
+void XOR(unsigned long epochMax)
 {
 	struct NeuralNetwork nettest = InitializeNetwork();
-	for(int epoch = 0; epoch < 10000001; epoch++)
+	for(unsigned long epoch = 0; epoch < epochMax; epoch++)
 	{
-		
-        		
 		for (int i = 0; i < 7; i += 2)
 		{
 			ForwardPass(nettest, i, epoch);
