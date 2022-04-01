@@ -174,7 +174,7 @@ void ForwardPass(struct NeuralNetwork net, int inpValues, int epoch)
 			    NavMatrix(net.matAim, inpValues, 0));
 
 	// Printing the results every 100 epoch
-	if (epoch % 100000 == 0)
+	if (epoch % 100 == 0)
         {
 		if (inpValues == 0)
 		{
