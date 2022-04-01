@@ -10,9 +10,12 @@ Use the SDL library [SDL](https://www.libsdl.org/) to compile this OCR.
 
 For Ubuntu operating systems :
 
+(Ubuntu)
 ```bash
 sudo apt install libsdl1.2-dev
 ```
+(Other) :
+Compile this OCR, use a shell.
 
 ## Usage
 
