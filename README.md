@@ -23,6 +23,7 @@ First compile this project by :
 
 ```sh
 cd src && make
+```
 
 To clean this OCR :
 ```sh
