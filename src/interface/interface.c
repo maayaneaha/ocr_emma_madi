@@ -20,39 +20,14 @@ void on_quit_clicked()
 	gtk_main_quit();
 }
 
-SDL_Surface* resize_img(SDL_Surface *image)
+
+void display_image(GtkImage* image_holder, gchar* file_name)
 {
-    SDL_Surface *dest = SDL_CreateRGBSurface(SDL_HWSURFACE,
-                700, 800, image->format->BitsPerPixel,0,0,0,0);
-    SDL_SoftStretch(image, NULL, dest, NULL);
-
-    return dest;
+	GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(file_name, NULL);
+	pixbuf = gdk_pixbuf_scale_simple(pixbuf, 700, 700, GDK_INTERP_BILINEAR);
+	gtk_image_set_from_pixbuf(image_holder, pixbuf);
+	//gtk_image_set_from_file(image_holder, file_name);
 }
-
-void load_img(GUI* ui, gchar* path)
-{
-    SDL_Surface *s = IMG_Load(path);
-    if(s->w > 2000)
-    {
-        SDL_Surface *new = resize_img(s);
-        SDL_SaveBMP(new,"resized_img");
-        gtk_image_set_from_file(ui->image_holder, "resized_img");
-            SDL_UnlockSurface(new);
-        ui->sdlimage = s;
-    }
-    else
-    {
-        SDL_Surface *new = SDL_CreateRGBSurface(SDL_HWSURFACE,
-                700, 800, s->format->BitsPerPixel,
-                0,0,0,0);
-        SDL_SoftStretch(s, NULL, new, NULL);
-        SDL_SaveBMP(new, "image");
-        ui->sdlimage = s;
-        SDL_UnlockSurface(new);
-        gtk_image_set_from_file (ui->image_holder, "image");
-    }
-}
-
 
 void open_files_explorer(GtkButton* b, gpointer user)
 {
@@ -74,7 +49,8 @@ void open_files_explorer(GtkButton* b, gpointer user)
 	gui->filename = file_name;
 	gtk_widget_show(GTK_WIDGET(gui->solver));
 	gtk_widget_hide(GTK_WIDGET(gui->load));
-	load_img(gui, file_name);
+	//load_img(gui, file_name);
+	display_image(gui->image_holder, file_name);
 }
 
 
@@ -103,7 +79,7 @@ int main(int argc, char *argv[])
 		.QuitButton = QuitButton,
 		.StartButton = StartButton,
 		.filename = NULL,
-		.image_holder = image_holder;
+		.image_holder = image_holder,
 	};
 
 	//CONNECTION
@@ -116,7 +92,7 @@ int main(int argc, char *argv[])
 
 	gtk_builder_connect_signals(builder, NULL);
 
-	gtk_widget_show(interface);
+	gtk_widget_show(GTK_WIDGET(interface));
 
 	gtk_main();
 

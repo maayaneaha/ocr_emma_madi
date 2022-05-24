@@ -117,10 +117,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <!-- n-columns=1 n-rows=2 -->
+              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -128,24 +125,19 @@
                   <object class="GtkImage" id="image_holder">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="stock">gtk-missing-image</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <!-- n-columns=2 n-rows=7 -->
@@ -273,7 +265,18 @@ Contrast
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkScale">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="adjustment">conadj</property>
+                    <property name="round-digits">0</property>
+                    <property name="digits">0</property>
+                    <property name="value-pos">right</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -294,7 +297,7 @@ Contrast
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -310,13 +313,58 @@ Contrast
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <placeholder/>
+              <object class="GtkHeaderBar" id="ButtonsHeader1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-top">119</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkButton" id="HelpButton1">
+                    <property name="related-action">action1</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="pixel-size">20</property>
+                        <property name="icon-name">computer</property>
+                        <property name="icon_size">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="QuitButton1">
+                    <property name="label" translatable="yes">Quit</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkTextView">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -327,5 +375,11 @@ Contrast
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="rotadj">
+    <property name="lower">50</property>
+    <property name="upper">500</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
 </interface>
