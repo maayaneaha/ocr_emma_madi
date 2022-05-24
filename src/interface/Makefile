@@ -8,5 +8,10 @@ all: interface
 
 interface: interface.o
 
+clean:
+	${RM} *.o
+	${RM} *.d
+	${RM} interface
+
 # END
 
