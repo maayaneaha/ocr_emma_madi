@@ -12,6 +12,7 @@ typedef struct GUI
 	GtkButton* StartButton;
 	gchar* filename;
 	GtkImage* image_holder;
+	GtkBox* help_menu;
 }GUI;
 
 
@@ -53,9 +54,12 @@ void open_files_explorer(GtkButton* b, gpointer user)
 	display_image(gui->image_holder, file_name);
 }
 
-
-
-
+void open_help_menu(GtkButton* b, gpointer user)
+{
+	GUI* gui = user;
+	gtk_widget_show(GTK_WIDGET(gui->help_menu));
+	gtk_widget_hide(GTK_WIDGET(gui->load));
+}
 int main(int argc, char *argv[])
 {
 	gtk_init(&argc ,&argv);
@@ -70,6 +74,7 @@ int main(int argc, char *argv[])
 	GtkButton* QuitButton2 = GTK_BUTTON(gtk_builder_get_object(builder, "QuitButton2"));
 	GtkButton* StartButton = GTK_BUTTON(gtk_builder_get_object(builder, "StartButton"));
 	GtkImage* image_holder = GTK_IMAGE(gtk_builder_get_object(builder, "image_holder"));
+	GtkBox* help_menu = GTK_BOX(gtk_builder_get_object(builder,))
 
 	GUI gui={
 		.interface = interface,
@@ -80,6 +85,7 @@ int main(int argc, char *argv[])
 		.StartButton = StartButton,
 		.filename = NULL,
 		.image_holder = image_holder,
+		.help_menu = help_menu,
 	};
 
 	//CONNECTION
@@ -87,7 +93,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(QuitButton, "clicked", G_CALLBACK(on_quit_clicked),NULL);
 	g_signal_connect(QuitButton2, "clicked", G_CALLBACK(on_quit_clicked),NULL);
 	g_signal_connect(StartButton, "clicked", G_CALLBACK(open_files_explorer), &gui);
-
+	g_signal_connect(HelpButton, "clicked", G_CALLBACK(open_help_menu), &gui);
 
 
 	gtk_builder_connect_signals(builder, NULL);

@@ -308,7 +308,7 @@ Contrast
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="load3">
+          <object class="GtkBox" id="help_menu">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
@@ -356,9 +356,22 @@ Contrast
               </packing>
             </child>
             <child>
-              <object class="GtkTextView">
+              <object class="GtkLabel" id="help_text">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">To use our software in order to solve a sudoku from a picture, there are few simple steps.
+
+First, make sure to have the picture on your device.
+Then, when being on the menu, you can click on the folder icon, and the files explorer will open.
+
+After that, select your file, you will be redirected to the solver menu.</property>
+                <attributes>
+                  <attribute name="font-desc" value="Unifont Bold 10"/>
+                  <attribute name="weight" value="semibold"/>
+                  <attribute name="variant" value="normal"/>
+                  <attribute name="scale" value="1.5"/>
+                  <attribute name="foreground" value="#000000000000"/>
+                </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
