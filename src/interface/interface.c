@@ -13,6 +13,9 @@ typedef struct GUI
 	gchar* filename;
 	GtkImage* image_holder;
 	GtkBox* help_menu;
+	GtkButton* help_button;
+	GtkButton* refresh_button;
+	GtkButton* menu_button;
 }GUI;
 
 
@@ -54,11 +57,26 @@ void open_files_explorer(GtkButton* b, gpointer user)
 	display_image(gui->image_holder, file_name);
 }
 
+void refresh(GtkButton* b, gpointer user)
+{
+	GUI* gui = user;
+	display_image(gui->image_holder, gui->filename);
+}
+
 void open_help_menu(GtkButton* b, gpointer user)
 {
 	GUI* gui = user;
 	gtk_widget_show(GTK_WIDGET(gui->help_menu));
 	gtk_widget_hide(GTK_WIDGET(gui->load));
+	gtk_widget_hide(GTK_WIDGET(gui->solver));
+}
+
+void on_menu_clicked(GtkButton* b, gpointer user)
+{
+	GUI* gui = user;
+	gtk_widget_hide(GTK_WIDGET(gui->help_menu));
+	gtk_widget_show(GTK_WIDGET(gui->load));
+	gtk_widget_hide(GTK_WIDGET(gui->solver));
 }
 int main(int argc, char *argv[])
 {
@@ -74,7 +92,12 @@ int main(int argc, char *argv[])
 	GtkButton* QuitButton2 = GTK_BUTTON(gtk_builder_get_object(builder, "QuitButton2"));
 	GtkButton* StartButton = GTK_BUTTON(gtk_builder_get_object(builder, "StartButton"));
 	GtkImage* image_holder = GTK_IMAGE(gtk_builder_get_object(builder, "image_holder"));
-	GtkBox* help_menu = GTK_BOX(gtk_builder_get_object(builder,))
+	GtkBox* help_menu = GTK_BOX(gtk_builder_get_object(builder, "help_menu"));
+	GtkButton* help_button = GTK_BUTTON(gtk_builder_get_object(builder, "HelpButton"));
+	GtkButton* QuitButton1 = GTK_BUTTON(gtk_builder_get_object(builder, "QuitButton1"));
+	GtkButton* refresh_button = GTK_BUTTON(gtk_builder_get_object(builder, "RefreshButton"));
+	GtkButton* menu_button = GTK_BUTTON(gtk_builder_get_object(builder, "MenuButton"));
+	
 
 	GUI gui={
 		.interface = interface,
@@ -86,14 +109,20 @@ int main(int argc, char *argv[])
 		.filename = NULL,
 		.image_holder = image_holder,
 		.help_menu = help_menu,
+		.help_button = help_button,
+		.menu_button = menu_button,
 	};
+
 
 	//CONNECTION
 	g_signal_connect(interface, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(QuitButton, "clicked", G_CALLBACK(on_quit_clicked),NULL);
+	g_signal_connect(QuitButton1, "clicked", G_CALLBACK(on_quit_clicked),NULL);
 	g_signal_connect(QuitButton2, "clicked", G_CALLBACK(on_quit_clicked),NULL);
 	g_signal_connect(StartButton, "clicked", G_CALLBACK(open_files_explorer), &gui);
-	g_signal_connect(HelpButton, "clicked", G_CALLBACK(open_help_menu), &gui);
+	g_signal_connect(help_button, "clicked", G_CALLBACK(open_help_menu), &gui);
+	g_signal_connect(refresh_button, "clicked", G_CALLBACK(refresh), &gui);
+	g_signal_connect(menu_button, "clicked", G_CALLBACK(on_menu_clicked), &gui);
 
 
 	gtk_builder_connect_signals(builder, NULL);
