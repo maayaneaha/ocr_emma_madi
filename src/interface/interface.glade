@@ -265,7 +265,16 @@ Contrast
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkButton" id="ResolveButton">
+                    <property name="label" translatable="yes">Resolve</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -305,7 +314,7 @@ Contrast
               <object class="GtkHeaderBar" id="ButtonsHeader1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-top">119</property>
+                <property name="margin-top">400</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkButton" id="MenuButton">
@@ -348,6 +357,7 @@ Contrast
               <object class="GtkLabel" id="help_text">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-top">71</property>
                 <property name="label" translatable="yes">To use our software in order to solve a sudoku from a picture, there are few simple steps.
 
 First, make sure to have the picture on your device.

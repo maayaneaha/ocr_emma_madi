@@ -16,6 +16,7 @@ typedef struct GUI
 	GtkButton* help_button;
 	GtkButton* refresh_button;
 	GtkButton* menu_button;
+	GtkButton* resolve_button;
 }GUI;
 
 
@@ -31,6 +32,13 @@ void display_image(GtkImage* image_holder, gchar* file_name)
 	pixbuf = gdk_pixbuf_scale_simple(pixbuf, 700, 700, GDK_INTERP_BILINEAR);
 	gtk_image_set_from_pixbuf(image_holder, pixbuf);
 	//gtk_image_set_from_file(image_holder, file_name);
+}
+
+void display_result(GtkImage* image_holder, gchar* result_file)
+{
+	GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(result_file, NULL);
+	pixbuf = gdk_pixbuf_scale_simple(pixbuf, 700, 700, GDK_INTERP_BILINEAR);
+	gtk_image_set_from_pixbuf(image_holder, pixbuf);
 }
 
 void open_files_explorer(GtkButton* b, gpointer user)
@@ -84,6 +92,11 @@ int main(int argc, char *argv[])
 
 	GtkBuilder* builder = gtk_builder_new_from_file("interface.glade");
 
+	// Load CSS
+	GtkCssProvider *cssProvider = gtk_css_provider_new();
+	gtk_css_provider_load_from_path(cssProvider, "./style.css", NULL);
+
+
 	GtkWindow* interface = GTK_WINDOW(gtk_builder_get_object(builder, "interface"));
 	GtkStack* window_pages = GTK_STACK(gtk_builder_get_object(builder, "window_pages"));
 	GtkBox* load = GTK_BOX(gtk_builder_get_object(builder, "load"));
@@ -97,7 +110,7 @@ int main(int argc, char *argv[])
 	GtkButton* QuitButton1 = GTK_BUTTON(gtk_builder_get_object(builder, "QuitButton1"));
 	GtkButton* refresh_button = GTK_BUTTON(gtk_builder_get_object(builder, "RefreshButton"));
 	GtkButton* menu_button = GTK_BUTTON(gtk_builder_get_object(builder, "MenuButton"));
-	
+	GtkButton* resolve_button = GTK_BUTTON(gtk_builder_get_object(builder, "ResolveButton"));
 
 	GUI gui={
 		.interface = interface,
@@ -123,7 +136,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(help_button, "clicked", G_CALLBACK(open_help_menu), &gui);
 	g_signal_connect(refresh_button, "clicked", G_CALLBACK(refresh), &gui);
 	g_signal_connect(menu_button, "clicked", G_CALLBACK(on_menu_clicked), &gui);
-
+	g_signal_connect(resolve_button, "clicked", G_CALLBACK(display_result), &gui);
 
 	gtk_builder_connect_signals(builder, NULL);
 
