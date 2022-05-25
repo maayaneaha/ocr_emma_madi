@@ -18,6 +18,7 @@ typedef struct GUI
 	GtkButton* menu_button;
 	GtkButton* resolve_button;
 	GdkScreen *screen;
+	gchar* result_file;
 }GUI;
 
 
@@ -40,6 +41,32 @@ void display_result(GtkImage* image_holder, gchar* result_file)
 	display_image(image_holder, result_file);
 }
 
+size_t my_strlen(char str[])
+{
+    size_t i = 0;
+    for (; str[i] != 0;i ++); 
+    return i;
+}
+
+char *str_concat(char str1[], char str2[])
+{
+    char *res = calloc(my_strlen(str1) + my_strlen(str2)+1, sizeof(char));
+    for (size_t i = 0; i < my_strlen(str1); i ++) {
+    res[i] = str1[i];
+    }
+    for (size_t i = 0; i < my_strlen(str2); i ++) {
+    res[i + my_strlen(str1)] = str2[i];
+    }
+    return res;
+}
+
+void resolve_clicked(GtkButton* b, gpointer user, gchar* filename)
+{
+	system(str_concat("../Processing/filters", filename));
+	GUI* gui = user;
+	gui->result_file = "../Processing/filters/output.bmp";
+	//display_result(gui->image_holder, );
+}
 void open_files_explorer(GtkButton* b, gpointer user)
 {
 	GUI* gui = user;
@@ -92,7 +119,7 @@ int main(int argc, char *argv[])
 
 	// Load CSS
 	GtkCssProvider *cssProvider = gtk_css_provider_new();
-	gtk_css_provider_load_from_path(cssProvider, "./style.css", NULL);
+	gtk_css_provider_load_from_path(cssProvider, "./interface.css", NULL);
 
 	// Inject CSS
 	GdkScreen *screen = gdk_screen_get_default();
@@ -140,12 +167,14 @@ int main(int argc, char *argv[])
 	g_signal_connect(help_button, "clicked", G_CALLBACK(open_help_menu), &gui);
 	g_signal_connect(refresh_button, "clicked", G_CALLBACK(refresh), &gui);
 	g_signal_connect(menu_button, "clicked", G_CALLBACK(on_menu_clicked), &gui);
-	g_signal_connect(resolve_button, "clicked", G_CALLBACK(display_result), &gui);
+	g_signal_connect(resolve_button, "clicked", G_CALLBACK(resolve_clicked), &gui);
+	//g_signal_connect(resolve_button, "clicked", G_CALLBACK(display_result), &gui);
+
 
 	gtk_builder_connect_signals(builder, NULL);
 
 	gtk_widget_show(GTK_WIDGET(interface));
-
+	printf("%s", GUI->filename);
 	gtk_main();
 
 	return EXIT_SUCCESS;
