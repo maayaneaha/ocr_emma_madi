@@ -17,6 +17,7 @@ typedef struct GUI
 	GtkButton* refresh_button;
 	GtkButton* menu_button;
 	GtkButton* resolve_button;
+	GdkScreen *screen;
 }GUI;
 
 
@@ -36,9 +37,7 @@ void display_image(GtkImage* image_holder, gchar* file_name)
 
 void display_result(GtkImage* image_holder, gchar* result_file)
 {
-	GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(result_file, NULL);
-	pixbuf = gdk_pixbuf_scale_simple(pixbuf, 700, 700, GDK_INTERP_BILINEAR);
-	gtk_image_set_from_pixbuf(image_holder, pixbuf);
+	display_image(image_holder, result_file);
 }
 
 void open_files_explorer(GtkButton* b, gpointer user)
@@ -61,7 +60,6 @@ void open_files_explorer(GtkButton* b, gpointer user)
 	gui->filename = file_name;
 	gtk_widget_show(GTK_WIDGET(gui->solver));
 	gtk_widget_hide(GTK_WIDGET(gui->load));
-	//load_img(gui, file_name);
 	display_image(gui->image_holder, file_name);
 }
 
@@ -96,6 +94,11 @@ int main(int argc, char *argv[])
 	GtkCssProvider *cssProvider = gtk_css_provider_new();
 	gtk_css_provider_load_from_path(cssProvider, "./style.css", NULL);
 
+	// Inject CSS
+	GdkScreen *screen = gdk_screen_get_default();
+	gtk_style_context_add_provider_for_screen(screen,
+                                              GTK_STYLE_PROVIDER(cssProvider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 	GtkWindow* interface = GTK_WINDOW(gtk_builder_get_object(builder, "interface"));
 	GtkStack* window_pages = GTK_STACK(gtk_builder_get_object(builder, "window_pages"));
@@ -124,6 +127,7 @@ int main(int argc, char *argv[])
 		.help_menu = help_menu,
 		.help_button = help_button,
 		.menu_button = menu_button,
+		.screen = screen,
 	};
 
 
