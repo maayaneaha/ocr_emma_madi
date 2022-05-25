@@ -62,9 +62,7 @@ char *str_concat(char str1[], char str2[])
 
 void resolve_clicked(GtkButton* b, gpointer user, gchar* filename)
 {
-	system(str_concat("../Processing/filters", filename));
-	GUI* gui = user;
-	gui->result_file = "../Processing/filters/output.bmp";
+	//GUI* gui = user;
 	//display_result(gui->image_holder, );
 }
 void open_files_explorer(GtkButton* b, gpointer user)
@@ -93,12 +91,27 @@ void open_files_explorer(GtkButton* b, gpointer user)
 void refresh(GtkButton* b, gpointer user)
 {
 	GUI* gui = user;
+	char *res;
 	
-	printf("%s",res);
-	system(res);
-
+	char *cmd = str_concat("cd ../processing/; ./processing ",gui->filename);
+	if (1)
+	{
+		res = str_concat(cmd," 1");
+	}
+	else
+	{
+		res = str_concat(cmd," 0");
+	}
+	if (system("cd ../processing/; make"))
+	{
+		printf("cannot make");
+	}
+	if (system(res))
+	{
+		printf("Cannot found path for processing");
+	}
+	gui->filename = "../processing/output.bmp";
 	display_image(gui->image_holder, gui->filename);
-	
 
 }
 

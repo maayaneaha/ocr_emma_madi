@@ -2,8 +2,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include "filters.h"
-#include <stdlib.h>
-#include <string.h>
 
 void init_sdl()
 {
@@ -69,70 +67,65 @@ void wait_for_keypressed()
 
 void SDL_FreeSurface(SDL_Surface *surface);
 
-char* concat(const char *s1, const char *s2)
-{
-    char *result = malloc(strlen(s1) + strlen(s2) + 1); // +1 for the null-terminator
-    // in real code you would check for errors in malloc here
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
-}
-
-void save(SDL_Surface *image_surface, char* n)
-{
-    printf("%s",concat("output/",n));
-    SDL_SaveBMP(image_surface, concat("output/",n));
-}
-
 int main(int argc, char *array[])
 {
     if (argc != 3)
-	{
-	printf("ERROR: NO INPUT FILE\n");
+    {
+        printf("Usage: ./processing [PATH_TO_FILE] [PROCESSING MODE]\n");
         return EXIT_FAILURE;
-	}
-    SDL_Surface *image_surface;
-    SDL_Surface *screen_surface;
+    }
 
+    SDL_Surface *image_surface;
+    //SDL_Surface *screen_surface;
+
+    // initialise sdl
     init_sdl();
+    // Load image into memory from path
     image_surface = load_image(array[1]);
 
+    // Save picture size
     int width = image_surface->w;
     int height = image_surface->h;
 
-    screen_surface = display_image(image_surface);
-    wait_for_keypressed();
+    // Display original image
+    //screen_surface = display_image(image_surface);
+    // Wait for user press a key
+    //wait_for_keypressed();
 
-    grayscale(image_surface, width, height);
-    contrast(image_surface, width, height);
-    binarise(image_surface, width, height, 260);
-    invert(image_surface,width,height);
-    noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
-    blur(image_surface,width,height);
+    // Apply filters
+    //printf("%i",*array[2]);
 
+    if (*array[2] == 49)
+    {
+        contrast_1(image_surface, 10);
+        grayscale(image_surface, width, height);
+        otsu(image_surface);
+        // binarise(image_surface, width, height, 300);
+        noiseReduction(image_surface, width, height);
+        //invert(image_surface,width,height);
 
+    }
+    else
+    {
+        contrast_1(image_surface, 1000);
+        grayscale(image_surface,width,height);
+        binarise(image_surface,width,height,350);
+        //invert(image_surface,width,height);
+        //noiseReduction(image_surface, width, height);
+    }
 
-    //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
-    //otsu(image_surface);
-    //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
+    // edges_detection(image_surface, 0, width,height);
+    // Show processed image
+    //screen_surface = display_image(image_surface);
+    //wait_for_keypressed();
 
+    SDL_SaveBMP(image_surface, "output.bmp");
 
+    // Saving image with applied filters
+    // clear and exit
 
-
-
-    // END FILTERS
-
-    screen_surface = display_image(image_surface);
-    wait_for_keypressed();
-
-    // SAVING
-
-    save(image_surface,array[2]);
-
-    // END SAVING
-
-    SDL_FreeSurface(image_surface);
-    SDL_FreeSurface(screen_surface);
+    //SDL_FreeSurface(image_surface);
+    //SDL_FreeSurface(screen_surface);
 
     return 0;
 }
