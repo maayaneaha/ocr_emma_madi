@@ -93,7 +93,10 @@ void open_files_explorer(GtkButton* b, gpointer user)
 void refresh(GtkButton* b, gpointer user)
 {
 	GUI* gui = user;
-	gui->filename = "output.bmp";
+	
+	printf("%s",res);
+	system(res);
+
 	display_image(gui->image_holder, gui->filename);
 	
 
