@@ -93,7 +93,10 @@ void open_files_explorer(GtkButton* b, gpointer user)
 void refresh(GtkButton* b, gpointer user)
 {
 	GUI* gui = user;
+	gui->filename = "output.bmp";
 	display_image(gui->image_holder, gui->filename);
+	
+
 }
 
 void open_help_menu(GtkButton* b, gpointer user)
@@ -174,7 +177,6 @@ int main(int argc, char *argv[])
 	gtk_builder_connect_signals(builder, NULL);
 
 	gtk_widget_show(GTK_WIDGET(interface));
-	printf("%s", GUI->filename);
 	gtk_main();
 
 	return EXIT_SUCCESS;
