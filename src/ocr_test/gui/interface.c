@@ -19,6 +19,8 @@ typedef struct GUI
 	GtkButton* resolve_button;
 	GdkScreen *screen;
 	gchar* result_file;
+	GtkSwitch* switch_button;
+	int activate;
 }GUI;
 
 
@@ -94,7 +96,7 @@ void refresh(GtkButton* b, gpointer user)
 	char *res;
 	
 	char *cmd = str_concat("cd ../processing/; ./processing ",gui->filename);
-	if (1)
+	if(gui->activate == 1)
 	{
 		res = str_concat(cmd," 1");
 	}
@@ -113,6 +115,12 @@ void refresh(GtkButton* b, gpointer user)
 	gui->filename = "../processing/output.bmp";
 	display_image(gui->image_holder, gui->filename);
 
+}
+
+void otsu_switch(gpointer user)
+{
+	GUI* gui = user;
+	gui->activate = -(gui->activate);
 }
 
 void open_help_menu(GtkButton* b, gpointer user)
@@ -160,6 +168,7 @@ int main(int argc, char *argv[])
 	GtkButton* refresh_button = GTK_BUTTON(gtk_builder_get_object(builder, "RefreshButton"));
 	GtkButton* menu_button = GTK_BUTTON(gtk_builder_get_object(builder, "MenuButton"));
 	GtkButton* resolve_button = GTK_BUTTON(gtk_builder_get_object(builder, "ResolveButton"));
+	GtkSwitch* switch_button = GTK_SWITCH(gtk_builder_get_object(builder, "switch"));
 
 	GUI gui={
 		.interface = interface,
@@ -174,8 +183,9 @@ int main(int argc, char *argv[])
 		.help_button = help_button,
 		.menu_button = menu_button,
 		.screen = screen,
+		.switch_button = switch_button,
+		.activate = 1,
 	};
-
 
 	//CONNECTION
 	g_signal_connect(interface, "destroy", G_CALLBACK(gtk_main_quit), NULL);
@@ -187,8 +197,8 @@ int main(int argc, char *argv[])
 	g_signal_connect(refresh_button, "clicked", G_CALLBACK(refresh), &gui);
 	g_signal_connect(menu_button, "clicked", G_CALLBACK(on_menu_clicked), &gui);
 	g_signal_connect(resolve_button, "clicked", G_CALLBACK(resolve_clicked), &gui);
+	g_signal_connect(switch_button, "activate", G_CALLBACK(otsu_switch), &gui);
 	//g_signal_connect(resolve_button, "clicked", G_CALLBACK(display_result), &gui);
-
 
 	gtk_builder_connect_signals(builder, NULL);
 
