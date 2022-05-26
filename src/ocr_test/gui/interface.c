@@ -20,7 +20,7 @@ typedef struct GUI
 	GdkScreen *screen;
 	gchar* result_file;
 	GtkSwitch* switch_button;
-	int activate;
+	gboolean activate;
 }GUI;
 
 
@@ -80,7 +80,6 @@ void open_files_explorer(GtkButton* b, gpointer user)
 	gchar *file_name = NULL;
 	if (gtk_dialog_run (GTK_DIALOG (p_dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-
 		file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (p_dialog));
 	}
 	gtk_widget_destroy (p_dialog);
@@ -94,9 +93,9 @@ void refresh(GtkButton* b, gpointer user)
 {
 	GUI* gui = user;
 	char *res;
-	
+
 	char *cmd = str_concat("cd ../processing/; ./processing ",gui->filename);
-	if(gui->activate == 1)
+	if(gui->activate)
 	{
 		res = str_concat(cmd," 1");
 	}
@@ -120,7 +119,15 @@ void refresh(GtkButton* b, gpointer user)
 void otsu_switch(gpointer user)
 {
 	GUI* gui = user;
-	gui->activate = -(gui->activate);
+	if(gui->activate)
+	{
+		gui->activate = FALSE;
+	}
+	else
+	{
+		gui->activate = TRUE;
+	}
+	//printf("%i", gui->activate);
 }
 
 void open_help_menu(GtkButton* b, gpointer user)
@@ -184,7 +191,7 @@ int main(int argc, char *argv[])
 		.menu_button = menu_button,
 		.screen = screen,
 		.switch_button = switch_button,
-		.activate = 1,
+		.activate = FALSE,
 	};
 
 	//CONNECTION

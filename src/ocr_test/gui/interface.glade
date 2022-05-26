@@ -259,6 +259,7 @@ Contrast
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="margin-bottom">20</property>
+                    <signal name="activate" handler="on_switch_activate" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
