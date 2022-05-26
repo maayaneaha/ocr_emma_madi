@@ -253,13 +253,13 @@ Contrast
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSwitch" id="switch">
+                  <object class="GtkSwitch" id="switch_button">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes">Switch!</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="margin-bottom">20</property>
-                    <signal name="activate" handler="on_switch_activate" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -414,4 +414,5 @@ After that, select your file, you will be redirected to the solver menu.</proper
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkToggleAction" id="toggleaction1"/>
 </interface>

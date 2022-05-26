@@ -20,9 +20,10 @@ typedef struct GUI
 	GdkScreen *screen;
 	gchar* result_file;
 	GtkSwitch* switch_button;
-	gboolean activate;
+	int activate;
 }GUI;
 
+int activate = 0;
 
 void on_quit_clicked()
 {
@@ -45,21 +46,21 @@ void display_result(GtkImage* image_holder, gchar* result_file)
 
 size_t my_strlen(char str[])
 {
-    size_t i = 0;
-    for (; str[i] != 0;i ++); 
-    return i;
+	size_t i = 0;
+	for (; str[i] != 0;i ++); 
+	return i;
 }
 
 char *str_concat(char str1[], char str2[])
 {
-    char *res = calloc(my_strlen(str1) + my_strlen(str2)+1, sizeof(char));
-    for (size_t i = 0; i < my_strlen(str1); i ++) {
-    res[i] = str1[i];
-    }
-    for (size_t i = 0; i < my_strlen(str2); i ++) {
-    res[i + my_strlen(str1)] = str2[i];
-    }
-    return res;
+	char *res = calloc(my_strlen(str1) + my_strlen(str2)+1, sizeof(char));
+	for (size_t i = 0; i < my_strlen(str1); i ++) {
+		res[i] = str1[i];
+	}
+	for (size_t i = 0; i < my_strlen(str2); i ++) {
+		res[i + my_strlen(str1)] = str2[i];
+	}
+	return res;
 }
 
 void resolve_clicked(GtkButton* b, gpointer user, gchar* filename)
@@ -95,7 +96,7 @@ void refresh(GtkButton* b, gpointer user)
 	char *res;
 
 	char *cmd = str_concat("cd ../processing/; ./processing ",gui->filename);
-	if(gui->activate)
+	if(activate == 1)
 	{
 		res = str_concat(cmd," 1");
 	}
@@ -111,23 +112,22 @@ void refresh(GtkButton* b, gpointer user)
 	{
 		printf("Cannot found path for processing");
 	}
-	gui->filename = "../processing/output.bmp";
-	display_image(gui->image_holder, gui->filename);
+	//gui->filename = "../processing/output.bmp";
+	display_image(gui->image_holder, "../processing/output.bmp");
 
 }
 
-void otsu_switch(gpointer user)
+void otsu_switch()
 {
-	GUI* gui = user;
-	if(gui->activate)
+	if(activate == 0)
 	{
-		gui->activate = FALSE;
+		activate = 1;
 	}
 	else
 	{
-		gui->activate = TRUE;
+		activate = 0;
 	}
-	//printf("%i", gui->activate);
+	printf("%i", activate);
 }
 
 void open_help_menu(GtkButton* b, gpointer user)
@@ -158,8 +158,8 @@ int main(int argc, char *argv[])
 	// Inject CSS
 	GdkScreen *screen = gdk_screen_get_default();
 	gtk_style_context_add_provider_for_screen(screen,
-                                              GTK_STYLE_PROVIDER(cssProvider),
-                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+			GTK_STYLE_PROVIDER(cssProvider),
+			GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 	GtkWindow* interface = GTK_WINDOW(gtk_builder_get_object(builder, "interface"));
 	GtkStack* window_pages = GTK_STACK(gtk_builder_get_object(builder, "window_pages"));
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 	GtkButton* refresh_button = GTK_BUTTON(gtk_builder_get_object(builder, "RefreshButton"));
 	GtkButton* menu_button = GTK_BUTTON(gtk_builder_get_object(builder, "MenuButton"));
 	GtkButton* resolve_button = GTK_BUTTON(gtk_builder_get_object(builder, "ResolveButton"));
-	GtkSwitch* switch_button = GTK_SWITCH(gtk_builder_get_object(builder, "switch"));
+	GtkSwitch* switch_button = GTK_SWITCH(gtk_builder_get_object(builder, "switch_button"));
 
 	GUI gui={
 		.interface = interface,
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 		.menu_button = menu_button,
 		.screen = screen,
 		.switch_button = switch_button,
-		.activate = FALSE,
+		.activate = 0,
 	};
 
 	//CONNECTION
@@ -204,7 +204,8 @@ int main(int argc, char *argv[])
 	g_signal_connect(refresh_button, "clicked", G_CALLBACK(refresh), &gui);
 	g_signal_connect(menu_button, "clicked", G_CALLBACK(on_menu_clicked), &gui);
 	g_signal_connect(resolve_button, "clicked", G_CALLBACK(resolve_clicked), &gui);
-	g_signal_connect(switch_button, "activate", G_CALLBACK(otsu_switch), &gui);
+	g_signal_connect(switch_button, "state-set", G_CALLBACK(otsu_switch), NULL);
+	g_signal_connect(switch_button, "activate", G_CALLBACK(otsu_switch), NULL);
 	//g_signal_connect(resolve_button, "clicked", G_CALLBACK(display_result), &gui);
 
 	gtk_builder_connect_signals(builder, NULL);
