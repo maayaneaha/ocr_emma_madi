@@ -20,16 +20,33 @@ typedef struct GUI
 	GdkScreen *screen;
 	gchar* result_file;
 	GtkSwitch* switch_button;
+	GtkAdjustment* binadj;
+	GtkAdjustment* conadj;
+	GtkScale* binarise_scale;
+	GtkScale* contrast_scale;
 	int activate;
 }GUI;
 
 int activate = 0;
+int binarise = 350;
+int contrast = 10;
 
 void on_quit_clicked()
 {
 	gtk_main_quit();
 }
 
+void binarise_scale_update(gpointer user)
+{
+	GUI* gui = user;
+	binarise = gtk_adjustment_get_value(gui->binadj);
+}
+
+void contrast_scale_update(gpointer user)
+{
+	GUI* gui = user;
+	contrast = gtk_adjustment_get_value(gui->conadj);
+}
 
 void display_image(GtkImage* image_holder, gchar* file_name)
 {
@@ -90,7 +107,7 @@ void open_files_explorer(GtkButton* b, gpointer user)
 	display_image(gui->image_holder, file_name);
 }
 
-void refresh(GtkButton* b, gpointer user)
+void refresh(GtkButton* b, gpointer user, int binarise, int contrast)
 {
 	GUI* gui = user;
 	char *res;
@@ -114,7 +131,7 @@ void refresh(GtkButton* b, gpointer user)
 	}
 	//gui->filename = "../processing/output.bmp";
 	display_image(gui->image_holder, "../processing/output.bmp");
-
+	printf("%i",binarise);
 }
 
 void otsu_switch()
@@ -176,6 +193,11 @@ int main(int argc, char *argv[])
 	GtkButton* menu_button = GTK_BUTTON(gtk_builder_get_object(builder, "MenuButton"));
 	GtkButton* resolve_button = GTK_BUTTON(gtk_builder_get_object(builder, "ResolveButton"));
 	GtkSwitch* switch_button = GTK_SWITCH(gtk_builder_get_object(builder, "switch_button"));
+	GtkAdjustment* binadj = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "binadj"));
+	GtkAdjustment* conadj = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adj"));
+
+	GtkScale* binarise_scale = GTK_SCALE(gtk_builder_get_object(builder, "binarise_scale"));
+	GtkScale* contrast_scale = GTK_SCALE(gtk_builder_get_object(builder, "contrast_scale"));
 
 	GUI gui={
 		.interface = interface,
@@ -192,6 +214,10 @@ int main(int argc, char *argv[])
 		.screen = screen,
 		.switch_button = switch_button,
 		.activate = 0,
+		.binadj = binadj,
+		.conadj = conadj,
+		.binarise_scale = binarise_scale,
+		.contrast_scale = contrast_scale,
 	};
 
 	//CONNECTION
@@ -206,6 +232,8 @@ int main(int argc, char *argv[])
 	g_signal_connect(resolve_button, "clicked", G_CALLBACK(resolve_clicked), &gui);
 	g_signal_connect(switch_button, "state-set", G_CALLBACK(otsu_switch), NULL);
 	g_signal_connect(switch_button, "activate", G_CALLBACK(otsu_switch), NULL);
+	g_signal_connect(binarise_scale, "format-value", G_CALLBACK(binarise_scale_update), NULL);
+	g_signal_connect(binarise_scale, "format-value", G_CALLBACK(binarise_scale_update), NULL);
 	//g_signal_connect(resolve_button, "clicked", G_CALLBACK(display_result), &gui);
 
 	gtk_builder_connect_signals(builder, NULL);
