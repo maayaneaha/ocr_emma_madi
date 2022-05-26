@@ -69,9 +69,9 @@ void SDL_FreeSurface(SDL_Surface *surface);
 
 int main(int argc, char *array[])
 {
-    if (argc != 3)
+    if (argc != 5)
     {
-        printf("Usage: ./processing [PATH_TO_FILE] [PROCESSING MODE]\n");
+        printf("Usage: ./processing [PATH_TO_FILE] [CONTRAST_VALUE] [BINARISE_VALUE] [OTSU ENABLE 1/0]\n");
         return EXIT_FAILURE;
     }
 
@@ -83,6 +83,9 @@ int main(int argc, char *array[])
     // Load image into memory from path
     image_surface = load_image(array[1]);
 
+    int contrast_value = atoi(array[2]);
+    int binarise_value = atoi(array[3]);
+
     // Save picture size
     int width = image_surface->w;
     int height = image_surface->h;
@@ -93,23 +96,23 @@ int main(int argc, char *array[])
     //wait_for_keypressed();
 
     // Apply filters
-    //printf("%i",*array[2]);
 
-    if (*array[2] == 49)
+    printf("%i",contrast_value);
+
+    if (*array[4] == 49)
     {
-        contrast_1(image_surface, 10);
+        contrast_1(image_surface, contrast_value);
         grayscale(image_surface, width, height);
         otsu(image_surface);
         // binarise(image_surface, width, height, 300);
         noiseReduction(image_surface, width, height);
         //invert(image_surface,width,height);
-
     }
     else
     {
-        contrast_1(image_surface, 1000);
+        contrast_1(image_surface, contrast_value);
         grayscale(image_surface,width,height);
-        binarise(image_surface,width,height,350);
+        binarise(image_surface,width,height,binarise_value);
         //invert(image_surface,width,height);
         //noiseReduction(image_surface, width, height);
     }
