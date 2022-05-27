@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 typedef struct GUI
 {
@@ -107,6 +108,16 @@ void open_files_explorer(GtkButton* b, gpointer user)
 	display_image(gui->image_holder, file_name);
 }
 
+char * convertNumberIntoArray(unsigned int number) {
+    unsigned int length = (int)(log10((float)number)) + 1;
+    char * arr = (char *) malloc(length * sizeof(char)), * curr = arr;
+    do {
+        *curr++ = number % 10;
+        number /= 10;
+    } while (number != 0);
+    return arr;
+}
+
 void refresh(GtkButton* b, gpointer user, int binarise, int contrast)
 {
 	GUI* gui = user;
@@ -115,23 +126,41 @@ void refresh(GtkButton* b, gpointer user, int binarise, int contrast)
 	char *cmd = str_concat("cd ../processing/; ./processing ",gui->filename);
 	if(activate == 1)
 	{
-		res = str_concat(cmd," 1");
+		cmd = str_concat(cmd, " ");
+		cmd = str_concat(cmd, convertNumberIntoArray(contrast));
+		cmd = str_concat(cmd, " ");
+		cmd = str_concat(cmd, convertNumberIntoArray(binarise));
+		cmd = str_concat(cmd, " ");
+		res = str_concat(cmd,"1");
 	}
 	else
 	{
-		res = str_concat(cmd," 0");
+		cmd = str_concat(cmd, " ");
+		cmd = str_concat(cmd, convertNumberIntoArray(contrast));
+		cmd = str_concat(cmd, " ");
+		cmd = str_concat(cmd, convertNumberIntoArray(binarise));
+		cmd = str_concat(cmd, " ");
+		res = str_concat(cmd,"0");
 	}
 	if (system("cd ../processing/; make"))
 	{
-		printf("cannot make");
+		printf("cannot make\n");
 	}
 	if (system(res))
 	{
-		printf("Cannot found path for processing");
+		printf("%s",res);
 	}
+
+	printf("Execute processing with \n");
+	printf("- binarise : %i\n",binarise);
+	printf("- contrast : %i\n",contrast);
+	printf("OTSU : %i\n", activate);
+
+
+
 	//gui->filename = "../processing/output.bmp";
 	display_image(gui->image_holder, "../processing/output.bmp");
-	printf("%i",binarise);
+	
 }
 
 void otsu_switch()
@@ -144,7 +173,6 @@ void otsu_switch()
 	{
 		activate = 0;
 	}
-	printf("%i", activate);
 }
 
 void open_help_menu(GtkButton* b, gpointer user)

@@ -97,8 +97,6 @@ int main(int argc, char *array[])
 
     // Apply filters
 
-    printf("%i",contrast_value);
-
     if (*array[4] == 49)
     {
         contrast_1(image_surface, contrast_value);
