@@ -121,42 +121,24 @@ char * convertNumberIntoArray(unsigned int number) {
 void refresh(GtkButton* b, gpointer user, int binarise, int contrast)
 {
 	GUI* gui = user;
-	char *res;
-
 	char *cmd = str_concat("cd ../processing/; ./processing ",gui->filename);
 	if(activate == 1)
 	{
-		cmd = str_concat(cmd, " ");
-		cmd = str_concat(cmd, convertNumberIntoArray(contrast));
-		cmd = str_concat(cmd, " ");
-		cmd = str_concat(cmd, convertNumberIntoArray(binarise));
-		cmd = str_concat(cmd, " ");
-		res = str_concat(cmd,"1");
+		char *res = str_concat(cmd, " 10 10 1");
+		if (system(res))
+	{
+		printf("Error");
+	}
 	}
 	else
 	{
-		cmd = str_concat(cmd, " ");
-		cmd = str_concat(cmd, convertNumberIntoArray(contrast));
-		cmd = str_concat(cmd, " ");
-		cmd = str_concat(cmd, convertNumberIntoArray(binarise));
-		cmd = str_concat(cmd, " ");
-		res = str_concat(cmd,"0");
-	}
-	if (system("cd ../processing/; make"))
+		char *res = str_concat(cmd, " 1000 350 0");
+		if (system(res))
 	{
-		printf("cannot make\n");
+		printf("Error");
 	}
-	if (system(res))
-	{
-		printf("%s",res);
 	}
-
-	printf("Execute processing with \n");
-	printf("- binarise : %i\n",binarise);
-	printf("- contrast : %i\n",contrast);
-	printf("OTSU : %i\n", activate);
-
-
+	
 
 	//gui->filename = "../processing/output.bmp";
 	display_image(gui->image_holder, "../processing/output.bmp");
