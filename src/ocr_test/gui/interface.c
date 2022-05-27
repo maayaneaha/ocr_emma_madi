@@ -37,16 +37,18 @@ void on_quit_clicked()
 	gtk_main_quit();
 }
 
-void binarise_scale_update(gpointer user)
+void binarise_scale_update(GtkAdjustment* k, gpointer user)
 {
 	GUI* gui = user;
 	binarise = gtk_adjustment_get_value(gui->binadj);
+	printf("%i\n", binarise);
 }
 
-void contrast_scale_update(gpointer user)
+void contrast_scale_update(GtkAdjustment* i, gpointer user)
 {
 	GUI* gui = user;
 	contrast = gtk_adjustment_get_value(gui->conadj);
+	printf("%i\n", contrast);
 }
 
 void display_image(GtkImage* image_holder, gchar* file_name)
@@ -122,6 +124,8 @@ void refresh(GtkButton* b, gpointer user, int binarise, int contrast)
 {
 	GUI* gui = user;
 	char *cmd = str_concat("cd ../processing/; ./processing ",gui->filename);
+	printf("%i", binarise);
+	printf("%i", contrast);
 	if(activate == 1)
 	{
 		char *res = str_concat(cmd, " 10 10 1");
@@ -204,7 +208,7 @@ int main(int argc, char *argv[])
 	GtkButton* resolve_button = GTK_BUTTON(gtk_builder_get_object(builder, "ResolveButton"));
 	GtkSwitch* switch_button = GTK_SWITCH(gtk_builder_get_object(builder, "switch_button"));
 	GtkAdjustment* binadj = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "binadj"));
-	GtkAdjustment* conadj = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "adj"));
+	GtkAdjustment* conadj = GTK_ADJUSTMENT(gtk_builder_get_object(builder, "conadj"));
 
 	GtkScale* binarise_scale = GTK_SCALE(gtk_builder_get_object(builder, "binarise_scale"));
 	GtkScale* contrast_scale = GTK_SCALE(gtk_builder_get_object(builder, "contrast_scale"));
@@ -242,8 +246,8 @@ int main(int argc, char *argv[])
 	g_signal_connect(resolve_button, "clicked", G_CALLBACK(resolve_clicked), &gui);
 	g_signal_connect(switch_button, "state-set", G_CALLBACK(otsu_switch), NULL);
 	g_signal_connect(switch_button, "activate", G_CALLBACK(otsu_switch), NULL);
-	g_signal_connect(binarise_scale, "format-value", G_CALLBACK(binarise_scale_update), NULL);
-	g_signal_connect(binarise_scale, "format-value", G_CALLBACK(binarise_scale_update), NULL);
+	g_signal_connect(binadj, "value-changed", G_CALLBACK(binarise_scale_update), &gui);
+	g_signal_connect(conadj, "value-changed", G_CALLBACK(contrast_scale_update), &gui);
 	//g_signal_connect(resolve_button, "clicked", G_CALLBACK(display_result), &gui);
 
 	gtk_builder_connect_signals(builder, NULL);
