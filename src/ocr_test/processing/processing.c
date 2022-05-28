@@ -69,6 +69,7 @@ void wait_for_keypressed()
 
 void SDL_FreeSurface(SDL_Surface *surface);
 
+<<<<<<< HEAD:src/Processing/filters/processing.c
 char* concat(const char *s1, const char *s2)
 {
     char *result = malloc(strlen(s1) + strlen(s2) + 1); // +1 for the null-terminator
@@ -91,35 +92,67 @@ int main(int argc, char *array[])
 	printf("ERROR: NO INPUT FILE\n");
         return EXIT_FAILURE;
 	}
-    SDL_Surface *image_surface;
-    SDL_Surface *screen_surface;
+=======
+int main(int argc, char *array[])
+{
+    if (argc != 5)
+    {
+        printf("Usage: ./processing [PATH_TO_FILE] [CONTRAST_VALUE] [BINARISE_VALUE] [OTSU ENABLE 1/0]\n");
+        return EXIT_FAILURE;
+    }
 
+>>>>>>> ce8a602b9d12b37d902453da05bab7ff1eecc1f0:src/ocr_test/processing/processing.c
+    SDL_Surface *image_surface;
+    //SDL_Surface *screen_surface;
+
+    // initialise sdl
     init_sdl();
+    // Load image into memory from path
     image_surface = load_image(array[1]);
 
+    int contrast_value = atoi(array[2]);
+    int binarise_value = atoi(array[3]);
+
+    // Save picture size
     int width = image_surface->w;
     int height = image_surface->h;
 
-    screen_surface = display_image(image_surface);
-    wait_for_keypressed();
+    // Display original image
+    //screen_surface = display_image(image_surface);
+    // Wait for user press a key
+    //wait_for_keypressed();
 
-    grayscale(image_surface, width, height);
-    contrast(image_surface, width, height);
-    binarise(image_surface, width, height, 260);
-    invert(image_surface,width,height);
-    noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
-    blur(image_surface,width,height);
+    // Apply filters
 
+    if (*array[4] == 49)
+    {
+        contrast_1(image_surface, contrast_value);
+        grayscale(image_surface, width, height);
+        otsu(image_surface);
+        // binarise(image_surface, width, height, 300);
+        noiseReduction(image_surface, width, height);
+        //invert(image_surface,width,height);
+    }
+    else
+    {
+        contrast_1(image_surface, contrast_value);
+        grayscale(image_surface,width,height);
+        binarise(image_surface,width,height,binarise_value);
+        //invert(image_surface,width,height);
+        //noiseReduction(image_surface, width, height);
+    }
 
+    // edges_detection(image_surface, 0, width,height);
+    // Show processed image
+    //screen_surface = display_image(image_surface);
+    //wait_for_keypressed();
 
-    //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
-    //otsu(image_surface);
-    //noiseReduction(image_surface,width,height); //RESULTS ARE NOT AS EXPECTED
+    SDL_SaveBMP(image_surface, "output.bmp");
 
+    // Saving image with applied filters
+    // clear and exit
 
-
-
-
+<<<<<<< HEAD:src/Processing/filters/processing.c
     // END FILTERS
 
     screen_surface = display_image(image_surface);
@@ -133,6 +166,10 @@ int main(int argc, char *array[])
 
     SDL_FreeSurface(image_surface);
     SDL_FreeSurface(screen_surface);
+=======
+    //SDL_FreeSurface(image_surface);
+    //SDL_FreeSurface(screen_surface);
+>>>>>>> ce8a602b9d12b37d902453da05bab7ff1eecc1f0:src/ocr_test/processing/processing.c
 
     return 0;
 }

@@ -16,4 +16,3 @@ clean:
 	(cd output; ${RM} *.bmp)
 	${RM} *.bmp
 	${RM} processing
-	${RM} *.sh
