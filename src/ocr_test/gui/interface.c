@@ -188,19 +188,21 @@ void on_menu_clicked(GtkButton* b, gpointer user)
 }
 int main(int argc, char *argv[])
 {
+	//system("GTK_THEME=Adwaita:dark");
 	gtk_init(&argc ,&argv);
 
 	GtkBuilder* builder = gtk_builder_new_from_file("interface.glade");
 
 	// Load CSS
 	GtkCssProvider *cssProvider = gtk_css_provider_new();
-	gtk_css_provider_load_from_path(cssProvider, "./interface.css", NULL);
+	gtk_css_provider_load_from_path(cssProvider, "interface.css", NULL);
 
 	// Inject CSS
 	GdkScreen *screen = gdk_screen_get_default();
 	gtk_style_context_add_provider_for_screen(screen,
 			GTK_STYLE_PROVIDER(cssProvider),
 			GTK_STYLE_PROVIDER_PRIORITY_USER);
+
 
 	GtkWindow* interface = GTK_WINDOW(gtk_builder_get_object(builder, "interface"));
 	GtkStack* window_pages = GTK_STACK(gtk_builder_get_object(builder, "window_pages"));

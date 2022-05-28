@@ -334,7 +334,7 @@ Contrast
               <object class="GtkHeaderBar" id="ButtonsHeader1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-top">400</property>
+                <property name="margin-top">194</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkButton" id="MenuButton">
@@ -377,19 +377,33 @@ Contrast
               <object class="GtkLabel" id="help_text">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-top">71</property>
                 <property name="label" translatable="yes">To use our software in order to solve a sudoku from a picture, there are few simple steps.
 
+
+
 First, make sure to have the picture on your device.
+
+
+
 Then, when being on the menu, you can click on the folder icon, and the files explorer will open.
 
-After that, select your file, you will be redirected to the solver menu.</property>
+
+
+After that, select your file, you will be redirected to the solver menu.
+You can ajust many parameters, for instance the contrast, or even 
+choose using or not Otsu Threeholding.
+
+Hoping you will enjoy every features from our software,
+
+Sincerely,
+
+EMMA MADI's dev' team.</property>
                 <attributes>
                   <attribute name="font-desc" value="Unifont Bold 10"/>
                   <attribute name="weight" value="semibold"/>
                   <attribute name="variant" value="normal"/>
                   <attribute name="scale" value="1.5"/>
-                  <attribute name="foreground" value="#000000000000"/>
+                  <attribute name="foreground" value="#ffffffffffff"/>
                 </attributes>
               </object>
               <packing>
