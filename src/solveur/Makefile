@@ -1,23 +1,19 @@
-# Makefile
+CC=gcc
 
-CC = gcc
-CPPFLAGS = -MMD
-CFLAGS = -Wall -Wextra -std=c99 -O0 -g -lm
-LDFLAGS =
-LDLIBS =
+CPPFLAGS= `pkg-config --cflags sdl gtk+-3.0` -MMD
+CFLAGS= -Wall -Wextra -Werror -std=c99 -O3 -g
+LDFLAGS=
+LDLIBS= `pkg-config --libs sdl gtk+-3.0` -lSDL_image -lm -lSDL_gfx
 
-OBJ = solvermain.o solver.o
-DEP = ${OBJ:.o=.d}
 
-all: solver
+all : construct 
 
-main: main.c solver.c solver.h
 
-clean:
-	${RM} ${OBJ} ${DEP} solver grid_00.result grid_01.result
+construct : newreader.o pixel_operations.o construct.o
 
-solver:
-	gcc -Wall -Wextra -std=c99 -O1 -o solver *.c *.h -g
--include ${DEP}
+construct.o : pixel_operations.h newreader.h
 
-# END
+clean :
+	${RM} *.o
+	${RM} *.d
+	${RM} construct
