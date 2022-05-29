@@ -1,19 +1,20 @@
-# Very basic Makefile
 
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -O2
-SRC = resolveur.c auxiliaire_functions.c
-OBJ = ${SRC:.c=.o}
-solver: resolveur.o
-	$(CC) $(CFLAGS) resolveur.o -o solver
+CC=gcc
 
--include ${DEP}
+CPPFLAGS= `pkg-config --cflags sdl gtk+-3.0` -MMD
+CFLAGS= -Wall -Wextra -Werror -std=c99 -O3 -g
+LDFLAGS=
+LDLIBS= `pkg-config --libs sdl gtk+-3.0` -lSDL_image -lm -lSDL_gfx
 
-clean:
-	rm -f *.o
-	rm -f ${DEP}
-	rm -f ${PRG}
-	${RM} *.result
-	rm -rf *solver
 
-# END
+all : construct 
+
+
+construct : newreader.o pixel_operations.o construct.o
+
+construct.o : pixel_operations.h newreader.h
+
+clean :
+	${RM} *.o
+	${RM} *.d
+	${RM} construct
