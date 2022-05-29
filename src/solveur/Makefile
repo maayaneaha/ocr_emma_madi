@@ -1,3 +1,4 @@
+
 CC=gcc
 
 CPPFLAGS= `pkg-config --cflags sdl gtk+-3.0` -MMD
